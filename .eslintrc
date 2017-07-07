@@ -1,0 +1,15 @@
+{
+	"globals": {
+    "document": true,
+    "window": true
+	},
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "rules": {
+    "func-names": ["error", "never"],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-param-reassign": ["error", { "props": false }],
+    "global-require": 0,
+    "react/no-array-index-key": 0
+  }
+}
