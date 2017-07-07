@@ -1,4 +1,4 @@
-# Contacts list project
+# Hangman game project
 Simple hangman game
 
 # Start
