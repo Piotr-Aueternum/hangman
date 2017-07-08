@@ -4,6 +4,6 @@ import './App.scss';
 
 export default () => (
   <div className="container">
-    <Hangman word="Hangman" />
+    <Hangman word="Hangman" filter={/[A-Z]/i} />
   </div>
 );
