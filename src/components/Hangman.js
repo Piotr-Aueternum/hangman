@@ -6,20 +6,27 @@ export default class extends React.Component {
   static propTypes = {
     filter: PropTypes.instanceOf(RegExp).isRequired,
     word: PropTypes.string.isRequired,
+    missLength: PropTypes.number,
   }
   static defaultProps = {
     captureContext: window,
+    missLength: 10,
   }
   constructor(props) {
     super(props);
     const { word, filter } = props;
-    this.state = {
-      word,
-      filter,
-      letters: [],
-    };
-    this.matchLetter = this.matchLetter.bind(this);
-    this.isRepeatedLetter = this.isRepeatedLetter.bind(this);
+    Object.assign(this, {
+      state: {
+        word: word.toUpperCase(),
+        filter,
+        letters: [],
+        matchedLetters: [],
+        missedLetters: [],
+      },
+      isCorrectLetter: this.isCorrectLetter.bind(this),
+      isRepeatedLetter: this.isRepeatedLetter.bind(this),
+      isMatchedLetter: this.isMatchedLetter.bind(this),
+    });
   }
   componentDidMount() {
     this.keyPressListener();
@@ -27,32 +34,64 @@ export default class extends React.Component {
   keyPressListener() {
     window.addEventListener('keypress', (event) => {
       const { key: letter } = event;
-      this.addLetter(letter);
+      const { isCorrectLetter, isRepeatedLetter } = this;
+      const { letters, missedLetters } = this.state;
+
+      const normalizedLetter = letter.toUpperCase();
+      const match = isCorrectLetter(letter) && !isRepeatedLetter(letter, letters);
+      if (missedLetters.length < this.props.missLength) {
+        if (match) {
+          this.addLetter(normalizedLetter);
+          this.addMatchedLetter(normalizedLetter);
+          this.addMissedLetter(normalizedLetter);
+          setTimeout(() => console.log(this.state));
+        }
+      }
     });
   }
   addLetter(letter) {
-    const { matchLetter, isRepeatedLetter } = this;
-    const normalizedLetter = letter.toUpperCase();
-    const match = matchLetter(normalizedLetter) && !isRepeatedLetter(normalizedLetter);
+    const { letters, word } = this.state;
+    const { isCorrectLetter, isRepeatedLetter } = this;
+    const match = isCorrectLetter(letter, word) && !isRepeatedLetter(letter, letters);
     if (match) {
-      const { letters } = this.state;
-      this.setState({ letters: [...letters, normalizedLetter] });
+      this.setState({ letters: [...letters, letter] });
     }
   }
-  matchLetter(letter) {
+  addMatchedLetter(letter) {
+    const { isMatchedLetter, isRepeatedLetter } = this;
+    const { matchedLetters, word } = this.state;
+    const match = isMatchedLetter(letter, word) && !isRepeatedLetter(letter, matchedLetters);
+    if (match) {
+      this.setState({ matchedLetters: [...matchedLetters, letter] });
+    }
+  }
+  addMissedLetter(letter) {
+    const { isMatchedLetter, isRepeatedLetter } = this;
+    const { missedLetters, word } = this.state;
+    const match = !isMatchedLetter(letter, word) && !isRepeatedLetter(letter, missedLetters);
+    if (match) {
+      this.setState({ missedLetters: [...missedLetters, letter] });
+    }
+  }
+  isMatchedLetter(letter, word) {
+    this.setState({ ...this.state });
+    return word.includes(letter);
+  }
+  isCorrectLetter(letter) {
     const { filter } = this.state;
     return Boolean(letter.match(filter));
   }
-  isRepeatedLetter(letter) {
-    const { letters } = this.state;
-    return letters.includes(letter);
+  isRepeatedLetter(letter, letters) {
+    this.setState({ ...this.state });
+    return Boolean(letters.includes(letter));
   }
   render() {
-    const { word, letters } = this.state;
+    const { missedLetters } = this.state;
+    const { missLength } = this.props;
     return (
       <div>
-        <p>Your word is: {word}</p>
-        <p>Used letters: {letters.map(letter => letter)}</p>
+        <p>You missed: {missedLetters.map((letter, key) => <span key={key}>{letter} </span>)}</p>
+        {!(missedLetters.length < missLength) && (<div>Gameover</div>)}
       </div>
     );
   }
