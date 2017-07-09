@@ -23,9 +23,6 @@ export default class Hangman extends React.Component {
         matchedLetters: [],
         missedLetters: [],
       },
-      isCorrectLetter: this.isCorrectLetter.bind(this),
-      isRepeatedLetter: this.isRepeatedLetter.bind(this),
-      isMatchedLetter: this.isMatchedLetter.bind(this),
       restartGame: this.restartGame.bind(this),
     });
   }
@@ -38,54 +35,44 @@ export default class Hangman extends React.Component {
   keyPressListener() {
     window.addEventListener('keypress', (event) => {
       const { key: letter } = event;
-      const { isCorrectLetter, isRepeatedLetter } = this;
-      const { letters, missedLetters, hitedLetters, matchedLetters } = this.state;
+      const { missedLetters, hitedLetters, matchedLetters } = this.state;
 
       const normalizedLetter = letter.toUpperCase();
-      const match = isCorrectLetter(letter) && !isRepeatedLetter(letter, letters);
       if ((missedLetters.length < this.props.missLength)
        || (matchedLetters.length < hitedLetters)) {
-        if (match) {
-          this.addLetter(normalizedLetter);
-        }
+        this.addLetter(normalizedLetter);
       }
     });
   }
   addLetter(letter) {
-    const { letters, word, matchedLetters, missedLetters } = this.state;
-    const { isCorrectLetter, isRepeatedLetter, isMatchedLetter } = this;
-    const match = isMatchedLetter(letter, word) && !isRepeatedLetter(letter, matchedLetters);
-    const miss = !isMatchedLetter(letter, word) && !isRepeatedLetter(letter, missedLetters);
-    const correct = isCorrectLetter(letter, word) && !isRepeatedLetter(letter, letters);
-    switch (true) {
-      case match: {
-        this.setState({ matchedLetters: [...matchedLetters, letter] });
-        break;
-      }
-      case miss: {
-        this.setState({ missedLetters: [...missedLetters, letter] });
-        break;
-      }
-      case correct: {
-        this.setState({ letters: [...letters, letter] });
-        break;
-      }
-      default: {
-        this.setState({ ...this.state });
+    const { letters, word, matchedLetters, missedLetters, filter } = this.state;
+    const isCorrectLetter = (sLetter, sFilter) => Boolean(sLetter.match(sFilter));
+    const isMatchedLetter = (sLetter, sWord) => sWord.includes(sLetter);
+    const isRepeatedLetter = (sLetter, sLetters) => !isMatchedLetter(sLetter, sLetters);
+
+    const match = isMatchedLetter(letter, word) && isRepeatedLetter(letter, matchedLetters);
+    const miss = !isMatchedLetter(letter, word) && isRepeatedLetter(letter, missedLetters);
+    const correct = !isMatchedLetter(letter, letters);
+
+    if (isCorrectLetter(letter, filter)) {
+      switch (true) {
+        case match: {
+          this.setState({ matchedLetters: [...matchedLetters, letter] });
+          break;
+        }
+        case miss: {
+          this.setState({ missedLetters: [...missedLetters, letter] });
+          break;
+        }
+        case correct: {
+          this.setState({ letters: [...letters, letter] });
+          break;
+        }
+        default: {
+          this.setState({ ...this.state });
+        }
       }
     }
-  }
-  isMatchedLetter(letter, word) {
-    this.setState({ ...this.state });
-    return word.includes(letter);
-  }
-  isCorrectLetter(letter) {
-    const { filter } = this.state;
-    return Boolean(letter.match(filter));
-  }
-  isRepeatedLetter(letter, letters) {
-    this.setState({ ...this.state });
-    return Boolean(letters.includes(letter));
   }
   render() {
     const { missedLetters, word, matchedLetters } = this.state;
