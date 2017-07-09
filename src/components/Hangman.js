@@ -7,10 +7,12 @@ export default class Hangman extends React.Component {
     filter: PropTypes.instanceOf(RegExp).isRequired,
     word: PropTypes.string.isRequired,
     missLength: PropTypes.number,
+    maxLength: PropTypes.number,
   }
   static defaultProps = {
     captureContext: window,
     missLength: 10,
+    maxLength: 11,
   }
   constructor(props) {
     super(props);
@@ -46,6 +48,7 @@ export default class Hangman extends React.Component {
   }
   addLetter(letter) {
     const { letters, word, matchedLetters, missedLetters, filter } = this.state;
+
     const isCorrectLetter = (sLetter, sFilter) => Boolean(sLetter.match(sFilter));
     const isMatchedLetter = (sLetter, sWord) => sWord.includes(sLetter);
     const isRepeatedLetter = (sLetter, sLetters) => !isMatchedLetter(sLetter, sLetters);
@@ -76,17 +79,27 @@ export default class Hangman extends React.Component {
   }
   render() {
     const { missedLetters, word, matchedLetters } = this.state;
-    const { missLength } = this.props;
+    const { missLength, maxLength } = this.props;
     if (!(missedLetters.length < missLength)) {
-      return (<div>Gameover <button onClick={this.restartGame}>Try again</button></div>);
+      return (<div>Gameover! <button onClick={this.restartGame}>Try again</button></div>);
+    }
+    const matched = word.split('').map(letter => (matchedLetters.includes(letter) ? letter : ' '));
+    let fixedLength = [...matched];
+    if (word.length < maxLength) {
+      for (let i = 0; i < (maxLength - word.length); i += 1) {
+        fixedLength = ['', ...fixedLength];
+      }
+    }
+    if (!matched.includes(' ')) {
+      return (<div>Win! <button onClick={this.restartGame}>Try again</button></div>);
     }
     return (
       <div>
-        <p>You missed: {
+        <p>You missed({missedLetters.length}/{missLength}): {
           missedLetters.map((letter, key) => (<Letter key={key}>{letter} </Letter>))
         }</p>
         <p>Your word: {
-          word.split('').map((letter, key) => (<Letter key={key}>{matchedLetters.includes(letter) ? letter : ' '}</Letter>))
+          fixedLength.map((letter, key) => (<Letter key={key}>{letter}</Letter>))
         }</p>
       </div>
     );

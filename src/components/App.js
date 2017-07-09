@@ -4,7 +4,7 @@ import './App.scss';
 
 const App = () => (
   <div className="container">
-    <Hangman word="Hangman" filter={/[A-Z]/i} />
+    <Hangman word="Hangman" maxLength={11} filter={/[A-Z]/i} />
   </div>
 );
 export default App;
