@@ -1,8 +1,10 @@
 .Letter {
-  width: 15px;
-  height: 15px;
-  display: inline-block;
+  display: block;
+  height: 100%;
   background-color: #ddd;
-  margin: 0 2px;
+  padding: 2px;
   text-align: center;
+  &--empty {
+    background-color: #aaa;
+  }
 }

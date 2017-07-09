@@ -1,0 +1,82 @@
+.Hangman {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 350px;
+  %horizontalCenter {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &__bar {
+    position: absolute;
+    top: 20px;
+    left: calc(50% + 45px);
+    transform: translateX(-448px);
+  }
+  &__head {
+    @extend %horizontalCenter;
+    top: 70px;
+    z-index: 1;
+  }
+  &__neck {
+    @extend %horizontalCenter;
+    top: 250px;
+  }
+  &__corpus {
+    @extend %horizontalCenter;
+    top: 310px;
+  }
+  &__right-arm {
+    position: absolute;
+    top: 320px;
+    left: 50%;
+    transform: translateX(20px);
+    z-index: 1;
+  }
+  &__left-arm {
+    position: absolute;
+    top: 320px;
+    right: 50%;
+    transform: translateX(-20px);
+    z-index: 1;
+  }
+  &__right-hand {
+    position: absolute;
+    top: 415px;
+    left: 50%;
+    transform: translateX(120px);
+  }
+  &__left-hand {
+    position: absolute;
+    top: 415px;
+    right: 50%;
+    transform: translateX(-120px);
+  }
+  &__right-leg {
+    position: absolute;
+    z-index: 1;
+    top: 460px;
+    right: 50%;
+    transform: translateX(85px);
+  }
+  &__left-leg {
+    position: absolute;
+    z-index: 1;
+    top: 460px;
+    left: 50%;
+    transform: translateX(-85px);
+  }
+  &__right-foot {
+    position: absolute;
+    top: 620px;
+    left: 50%;
+    transform: translateX(40px);
+  }
+  &__left-foot {
+    position: absolute;
+    top: 620px;
+    right: 50%;
+    transform: translateX(-40px);
+  }
+}

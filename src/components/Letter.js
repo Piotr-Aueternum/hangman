@@ -6,7 +6,7 @@ const propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const Letter = ({ children }) => (<span className="Letter">{children}</span>);
+const Letter = ({ children }) => (<span className={`Letter ${children ? 'Letter--empty' : ''}`}>{children}</span>);
 
 Letter.propTypes = propTypes;
 

@@ -1,0 +1,26 @@
+.Controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100%;
+  height: 100%;
+  &__matched {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    width: 100%;
+    height: 100px;
+  }
+  &__missed {
+    position: absolute;
+    right: 200px;
+    top: 20px;
+    width: 400px;
+  }
+  &__restart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
