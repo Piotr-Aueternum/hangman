@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Hangman.scss';
+import Letter from './Letter';
 
 export default class extends React.Component {
   static propTypes = {
@@ -44,7 +44,6 @@ export default class extends React.Component {
           this.addLetter(normalizedLetter);
           this.addMatchedLetter(normalizedLetter);
           this.addMissedLetter(normalizedLetter);
-          setTimeout(() => console.log(this.state));
         }
       }
     });
@@ -86,12 +85,17 @@ export default class extends React.Component {
     return Boolean(letters.includes(letter));
   }
   render() {
-    const { missedLetters } = this.state;
+    const { missedLetters, word, matchedLetters } = this.state;
     const { missLength } = this.props;
     return (
       <div>
-        <p>You missed: {missedLetters.map((letter, key) => <span key={key}>{letter} </span>)}</p>
-        {!(missedLetters.length < missLength) && (<div>Gameover</div>)}
+        <p>You missed: {
+          missedLetters.map((letter, key) => (<Letter key={key}>{letter} </Letter>))
+        }</p>
+        <p>Your word: {
+          word.split('').map((letter, key) => (<Letter key={key}>{matchedLetters.includes(letter) ? letter : ' '}</Letter>))
+        }</p>
+        {!(missedLetters.length < missLength) && (<div>Gameover<button>Try again</button></div>)}
       </div>
     );
   }
