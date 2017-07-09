@@ -2,8 +2,9 @@ import React from 'react';
 import Hangman from './Hangman';
 import './App.scss';
 
-export default () => (
+const App = () => (
   <div className="container">
     <Hangman word="Hangman" filter={/[A-Z]/i} />
   </div>
 );
+export default App;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Letter from './Letter';
 
-export default class extends React.Component {
+export default class Hangman extends React.Component {
   static propTypes = {
     filter: PropTypes.instanceOf(RegExp).isRequired,
     word: PropTypes.string.isRequired,
@@ -26,50 +26,53 @@ export default class extends React.Component {
       isCorrectLetter: this.isCorrectLetter.bind(this),
       isRepeatedLetter: this.isRepeatedLetter.bind(this),
       isMatchedLetter: this.isMatchedLetter.bind(this),
+      restartGame: this.restartGame.bind(this),
     });
   }
   componentDidMount() {
     this.keyPressListener();
   }
+  restartGame() {
+    this.setState({ letters: [], missedLetters: [], matchedLetters: [] });
+  }
   keyPressListener() {
     window.addEventListener('keypress', (event) => {
       const { key: letter } = event;
       const { isCorrectLetter, isRepeatedLetter } = this;
-      const { letters, missedLetters } = this.state;
+      const { letters, missedLetters, hitedLetters, matchedLetters } = this.state;
 
       const normalizedLetter = letter.toUpperCase();
       const match = isCorrectLetter(letter) && !isRepeatedLetter(letter, letters);
-      if (missedLetters.length < this.props.missLength) {
+      if ((missedLetters.length < this.props.missLength)
+       || (matchedLetters.length < hitedLetters)) {
         if (match) {
           this.addLetter(normalizedLetter);
-          this.addMatchedLetter(normalizedLetter);
-          this.addMissedLetter(normalizedLetter);
         }
       }
     });
   }
   addLetter(letter) {
-    const { letters, word } = this.state;
-    const { isCorrectLetter, isRepeatedLetter } = this;
-    const match = isCorrectLetter(letter, word) && !isRepeatedLetter(letter, letters);
-    if (match) {
-      this.setState({ letters: [...letters, letter] });
-    }
-  }
-  addMatchedLetter(letter) {
-    const { isMatchedLetter, isRepeatedLetter } = this;
-    const { matchedLetters, word } = this.state;
+    const { letters, word, matchedLetters, missedLetters } = this.state;
+    const { isCorrectLetter, isRepeatedLetter, isMatchedLetter } = this;
     const match = isMatchedLetter(letter, word) && !isRepeatedLetter(letter, matchedLetters);
-    if (match) {
-      this.setState({ matchedLetters: [...matchedLetters, letter] });
-    }
-  }
-  addMissedLetter(letter) {
-    const { isMatchedLetter, isRepeatedLetter } = this;
-    const { missedLetters, word } = this.state;
-    const match = !isMatchedLetter(letter, word) && !isRepeatedLetter(letter, missedLetters);
-    if (match) {
-      this.setState({ missedLetters: [...missedLetters, letter] });
+    const miss = !isMatchedLetter(letter, word) && !isRepeatedLetter(letter, missedLetters);
+    const correct = isCorrectLetter(letter, word) && !isRepeatedLetter(letter, letters);
+    switch (true) {
+      case match: {
+        this.setState({ matchedLetters: [...matchedLetters, letter] });
+        break;
+      }
+      case miss: {
+        this.setState({ missedLetters: [...missedLetters, letter] });
+        break;
+      }
+      case correct: {
+        this.setState({ letters: [...letters, letter] });
+        break;
+      }
+      default: {
+        this.setState({ ...this.state });
+      }
     }
   }
   isMatchedLetter(letter, word) {
@@ -87,6 +90,9 @@ export default class extends React.Component {
   render() {
     const { missedLetters, word, matchedLetters } = this.state;
     const { missLength } = this.props;
+    if (!(missedLetters.length < missLength)) {
+      return (<div>Gameover <button onClick={this.restartGame}>Try again</button></div>);
+    }
     return (
       <div>
         <p>You missed: {
@@ -95,7 +101,6 @@ export default class extends React.Component {
         <p>Your word: {
           word.split('').map((letter, key) => (<Letter key={key}>{matchedLetters.includes(letter) ? letter : ' '}</Letter>))
         }</p>
-        {!(missedLetters.length < missLength) && (<div>Gameover<button>Try again</button></div>)}
       </div>
     );
   }
