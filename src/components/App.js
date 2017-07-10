@@ -1,6 +1,7 @@
 import React from 'react';
 import Controls from './Controls';
 import Hangman from './Hangman';
+import { getWord } from '../services';
 import './App.scss';
 
 
@@ -12,16 +13,24 @@ export default class App extends React.Component {
     Object.assign(this, {
       state: {
         score: 0,
-        word: 'null',
+        word: undefined,
       },
       setScore: this.setScore.bind(this),
+      changeWord: this.changeWord.bind(this),
     });
+  }
+  componentDidMount() {
+    this.changeWord();
   }
   setScore(score) {
     this.setState({ score });
   }
   changeWord() {
-    console.log(this);
+    getWord({ minLength: 5, maxLength: 11 })
+      .then((resolve) => {
+        const { word } = resolve;
+        this.setState({ word });
+      });
   }
   render() {
     const { changeWord, setScore, state } = this;
@@ -30,7 +39,7 @@ export default class App extends React.Component {
       return (<div>Loading...</div>);
     }
     return (
-      <div className="container">
+      <div className="App">
         <Hangman score={score} data={hangman} />
         <Controls word={word} maxLength={11} filter={/[A-Z]/i} onChange={setScore} onRestart={changeWord} />
       </div>

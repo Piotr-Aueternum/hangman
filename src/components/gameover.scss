@@ -6,19 +6,18 @@
   background-color: rgba(0, 0, 90, 0.5);
   z-index: 10;
   &__message {
-    font-size: 5rem;
+    font-size: 5.75rem;
     margin: 0 0 1.5rem 0;
-    font-weight: bold;
     color: white;
     text-transform: uppercase;
   }
   &__button {
-    border: 2px dashed yellow;
+    border: 2px dashed #ffba00;
+    font-family: inherit;
     border-radius: 50px;
     background: none;
-    color: yellow;
-    font-size: 2.4rem;
-    font-weight: bold;
+    color: #ffba00;
+    font-size: 2rem;
     text-transform: uppercase;
     width: 340px;
     height: 100px;

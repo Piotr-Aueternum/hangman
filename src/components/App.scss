@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'AllerDisplay';
+  src: url('/assets/AllerDisplay.ttf') format('truetype');
+}
 .App {
-  background-color: red;
+  font-family: 'AllerDisplay';
 }

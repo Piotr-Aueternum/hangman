@@ -12,7 +12,7 @@ const Hangman = ({ score, data }) => (
     {data
       .filter((item, key) => (key < score))
       .map((item, key) => (
-        <img key={key} className={`Hangman__${item}`} src={`/img/${item}.png`} alt="" />
+        <img key={key} className={`Hangman__${item}`} src={`/assets/img/${item}.png`} alt="" />
       ))
     }
   </div>

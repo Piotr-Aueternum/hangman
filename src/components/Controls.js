@@ -36,6 +36,10 @@ export default class Controls extends React.Component {
   componentDidMount() {
     this.keyPressListener();
   }
+  componentWillReceiveProps(nextProps) {
+    const { word } = nextProps;
+    this.setState({ word: word.toUpperCase() });
+  }
   restartGame() {
     const { onChange, onRestart } = this.props;
     this.setState({ letters: [], missedLetters: [], matchedLetters: [] });

@@ -10,10 +10,13 @@
   border-radius: 5px;
   &--missed {
     color: #4d71fa;
+    margin: 0 0.25rem;
+    font-size: 5.75rem;
   }
   &--matched {
     background-color: #50525a;
     color: #fff;
+    font-size: 4.75rem;
   }
   &--empty {
     background-color: rgba(80, 82, 90, 0.3);
