@@ -1,5 +1,4 @@
-$md: 1300px;
-$xl: 1600px;
+$md: 1500px;
 
 @mixin maxWidth($size) {
   @media(max-width: $size) {
