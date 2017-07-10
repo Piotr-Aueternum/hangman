@@ -5,10 +5,7 @@
   left: 0;
   top: 0;
   width: 350px;
-  @include maxWidth($xl) {
-    transform-origin: top left;
-    transform: scale(0.65);
-  }
+  transform-origin: top left;
   %horizontalCenter {
     position: absolute;
     left: 50%;
