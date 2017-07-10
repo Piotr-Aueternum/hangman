@@ -1,3 +1,5 @@
+@import 'mediaQuery';
+
 .Controls {
   position: absolute;
   top: 0;
@@ -13,6 +15,9 @@
     background-color: #4d71fa;
     width: 500px;
     height: 1000px;
+    @include maxWidth($md) {
+      width: 400px;
+    }
     transform: translate(20%, 50%) rotate(45deg);
     z-index: -1;
   }

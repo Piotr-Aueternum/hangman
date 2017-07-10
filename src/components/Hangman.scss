@@ -1,9 +1,11 @@
+@import 'mediaQuery';
+
 .Hangman {
   position: absolute;
   left: 0;
   top: 0;
   width: 350px;
-  @media (max-width: 1600px) {
+  @include maxWidth($xl) {
     transform-origin: top left;
     transform: scale(0.65);
   }
