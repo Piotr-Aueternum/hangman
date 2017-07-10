@@ -25,6 +25,7 @@ export default class App extends React.Component {
     this.setState({ score });
   }
   changeWord() {
+    this.setState({ word: undefined });
     getWord({ minLength: 5, maxLength: 11 })
       .then((resolve) => {
         const { word } = resolve;
@@ -35,7 +36,7 @@ export default class App extends React.Component {
     const { changeWord, setScore, state } = this;
     const { score, word } = state;
     if (!word) {
-      return (<div>Loading...</div>);
+      return (<div className="App App--loading">Loading...</div>);
     }
     return (
       <div className="App">

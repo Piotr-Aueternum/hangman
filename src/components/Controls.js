@@ -106,17 +106,15 @@ export default class Controls extends React.Component {
         fixedLengthLetters = ['', ...fixedLengthLetters];
       }
     }
-    if ((!(missedLetters.length < missLength))
-    || (!matched.includes(' '))) {
-      return (
-        <div className="Controls__restart gameover">
-          <p className="gameover__message">Gameover</p>
-          <button autoFocus className="gameover__button" onClick={restartGame}>New word</button>
-        </div>
-      );
-    }
+    const gameOver = (!(missedLetters.length < missLength)) || (!matched.includes(' '));
     return (
       <div className="Controls">
+        {gameOver && (
+          <div className="Controls__restart gameover">
+            <p className="gameover__message">Gameover</p>
+            <button autoFocus className="gameover__button" onClick={restartGame}>New word</button>
+          </div>
+        )}
         <div className="Controls__missed">
           <span className="Controls__missed-label">You missed:</span>
           <Letters variant={'missed'} data={missedLetters} />

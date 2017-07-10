@@ -3,6 +3,10 @@
   left: 0;
   top: 0;
   width: 350px;
+  @media (max-width: 1600px) {
+    transform-origin: top left;
+    transform: scale(0.65);
+  }
   %horizontalCenter {
     position: absolute;
     left: 50%;
