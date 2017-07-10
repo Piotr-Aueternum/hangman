@@ -6,6 +6,9 @@
   top: 0;
   width: 350px;
   transform-origin: top left;
+  @include maxWidth($md) {
+    transform: scale(0.85);
+  }
   %horizontalCenter {
     position: absolute;
     left: 50%;
