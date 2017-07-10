@@ -4,7 +4,6 @@ import Hangman from './Hangman';
 import { getWord } from '../services';
 import './App.scss';
 
-
 const hangman = ['bar', 'head', 'neck', 'corpus', 'right-arm', 'left-arm', 'right-hand', 'left-hand', 'right-leg', 'left-leg', 'right-foot', 'left-foot'];
 
 export default class App extends React.Component {
