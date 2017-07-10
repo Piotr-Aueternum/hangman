@@ -3,6 +3,8 @@
   left: 0;
   top: 0;
   width: 350px;
+  transform-origin: top left;
+  transform: scale(0.95);
   %horizontalCenter {
     position: absolute;
     left: 50%;

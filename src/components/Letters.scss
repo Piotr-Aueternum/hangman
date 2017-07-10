@@ -4,8 +4,15 @@
   display: flex;
   &__item {
     list-style: none;
-    width: 20px;
-    height: 20px;
-    margin: 0 2px;
+  }
+  &--matched {
+    justify-content: flex-end;
+    .Letters {
+      &__item {
+        width: 125px;
+        height: 140px;
+        margin: 0 5px;
+      }
+    }
   }
 }

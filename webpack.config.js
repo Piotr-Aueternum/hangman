@@ -10,6 +10,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'src', 'static'),
     filename: 'bundle.js',
+    publicPath: 'src/',
   },
   module: {
     rules: [{
@@ -31,7 +32,6 @@ module.exports = {
     extensions: ['.js'],
   },
   devServer: {
-    contentBase: 'src',
     host: LAN || 'localhost',
   },
   plugins: [

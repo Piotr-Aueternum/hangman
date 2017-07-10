@@ -1,10 +1,21 @@
 .Letter {
   display: block;
   height: 100%;
-  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2px;
   text-align: center;
+  font-size: 3.4rem;
+  border-radius: 5px;
+  &--missed {
+    color: #4d71fa;
+  }
+  &--matched {
+    background-color: #50525a;
+    color: #fff;
+  }
   &--empty {
-    background-color: #aaa;
+    background-color: rgba(80, 82, 90, 0.3);
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Letters from './Letters';
 import './Controls.scss';
+import './gameover.scss';
 
 export default class Controls extends React.Component {
   static propTypes = {
@@ -10,6 +11,7 @@ export default class Controls extends React.Component {
     missLength: PropTypes.number,
     maxLength: PropTypes.number,
     onChange: PropTypes.func.isRequired,
+    onRestart: PropTypes.func.isRequired,
   }
   static defaultProps = {
     captureContext: window,
@@ -35,9 +37,10 @@ export default class Controls extends React.Component {
     this.keyPressListener();
   }
   restartGame() {
-    const { onChange } = this.props;
+    const { onChange, onRestart } = this.props;
     this.setState({ letters: [], missedLetters: [], matchedLetters: [] });
     onChange(0);
+    onRestart();
   }
   keyPressListener() {
     window.addEventListener('keypress', (event) => {
@@ -99,20 +102,23 @@ export default class Controls extends React.Component {
         fixedLengthLetters = ['', ...fixedLengthLetters];
       }
     }
-    if (!(missedLetters.length < missLength)) {
-      return (<div className="Controls__restart">Gameover! <button onClick={restartGame}>Try again</button></div>);
-    }
-    if (!matched.includes(' ')) {
-      return (<div className="Controls__restart">Win! <button onClick={restartGame}>Try again</button></div>);
+    if ((!(missedLetters.length < missLength))
+    || (!matched.includes(' '))) {
+      return (
+        <div className="Controls__restart gameover">
+          <p className="gameover__message">Gameover</p>
+          <button autoFocus className="gameover__button" onClick={restartGame}>New word</button>
+        </div>
+      );
     }
     return (
       <div className="Controls">
         <div className="Controls__missed">
-          You missed({missedLetters.length}/{missLength}):
-          <Letters data={missedLetters} />
+          <span className="Controls__missed-label">You missed:</span>
+          <Letters variant={'missed'} data={missedLetters} />
         </div>
         <div className="Controls__matched">
-          <Letters data={fixedLengthLetters} />
+          <Letters variant={'matched'} data={fixedLengthLetters} />
         </div>
       </div>
     );

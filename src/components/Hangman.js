@@ -9,11 +9,10 @@ const propTypes = {
 
 const Hangman = ({ score, data }) => (
   <div className="Hangman">
-    {console.log('received', score, data[score])}
     {data
       .filter((item, key) => (key < score))
       .map((item, key) => (
-        <img key={key} className={`Hangman__${item}`} src={`https://raw.githubusercontent.com/netguru/frontend-recruitment-task/master/imgs/${item}.png`} alt="" />
+        <img key={key} className={`Hangman__${item}`} src={`/img/${item}.png`} alt="" />
       ))
     }
   </div>

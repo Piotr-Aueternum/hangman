@@ -12,21 +12,27 @@ export default class App extends React.Component {
     Object.assign(this, {
       state: {
         score: 0,
+        word: 'null',
       },
       setScore: this.setScore.bind(this),
     });
   }
   setScore(score) {
     this.setState({ score });
-    console.log('score', score);
+  }
+  changeWord() {
+    console.log(this);
   }
   render() {
-    const { setScore, state } = this;
-    const { score } = state;
+    const { changeWord, setScore, state } = this;
+    const { score, word } = state;
+    if (!word) {
+      return (<div>Loading...</div>);
+    }
     return (
       <div className="container">
         <Hangman score={score} data={hangman} />
-        <Controls word="Hangman" maxLength={11} filter={/[A-Z]/i} onChange={setScore} />
+        <Controls word={word} maxLength={11} filter={/[A-Z]/i} onChange={setScore} onRestart={changeWord} />
       </div>
     );
   }

@@ -4,9 +4,10 @@ import './Letter.scss';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
+  variant: PropTypes.string.isRequired,
 };
 
-const Letter = ({ children }) => (<span className={`Letter ${children ? 'Letter--empty' : ''}`}>{children}</span>);
+const Letter = ({ children, variant }) => (<span className={`Letter ${children ? '' : 'Letter--empty'} Letter--${variant}`}>{children}</span>);
 
 Letter.propTypes = propTypes;
 
