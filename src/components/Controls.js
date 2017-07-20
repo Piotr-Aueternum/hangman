@@ -31,14 +31,18 @@ export default class Controls extends React.Component {
       },
       restartGame: this.restartGame.bind(this),
       addLetter: this.addLetter.bind(this),
+      keyPressListener: this.keyPressListener.bind(this),
     });
   }
   componentDidMount() {
-    this.keyPressListener();
+    window.addEventListener('keypress', this.keyPressListener);
   }
   componentWillReceiveProps(nextProps) {
     const { word } = nextProps;
     this.setState({ word: word.toUpperCase() });
+  }
+  componentWillUnMount() {
+    window.removeEventListener('keypress', this.keyPressListener);
   }
   restartGame() {
     const { onChange, onRestart } = this.props;
@@ -46,26 +50,29 @@ export default class Controls extends React.Component {
     onChange(0);
     onRestart();
   }
-  keyPressListener() {
-    window.addEventListener('keypress', (event) => {
-      const { key: letter } = event;
-      const { addLetter } = this;
-      const { word, missedLetters, matchedLetters } = this.state;
-      const { missLength } = this.props;
-      const normalizedLetter = letter.toUpperCase();
+  keyPressListener(event) {
+    const { key: letter } = event;
+    const {
+      addLetter,
+      state: { word, missedLetters, matchedLetters },
+      props: { missLength },
+    } = this;
 
-      const matched = word.split('').map(sLetter => (matchedLetters.includes(sLetter) ? sLetter : ' '));
+    const normalizedLetter = letter.toUpperCase();
 
-      if (matched.includes(' ')) {
-        if (missedLetters.length < missLength) {
-          addLetter(normalizedLetter);
-        }
+    const matched = word.split('').map(sLetter => (matchedLetters.includes(sLetter) ? sLetter : ' '));
+
+    if (matched.includes(' ')) {
+      if (missedLetters.length < missLength) {
+        addLetter(normalizedLetter);
       }
-    });
+    }
   }
   addLetter(letter) {
-    const { letters, word, matchedLetters, missedLetters, filter } = this.state;
-    const { onChange } = this.props;
+    const {
+      props: { onChange },
+      state: { letters, word, matchedLetters, missedLetters, filter },
+    } = this;
     const isCorrectLetter = (sLetter, sFilter) => Boolean(sLetter.match(sFilter));
     const isMatchedLetter = (sLetter, sWord) => sWord.includes(sLetter);
     const isRepeatedLetter = (sLetter, sLetters) => !isMatchedLetter(sLetter, sLetters);
@@ -96,9 +103,12 @@ export default class Controls extends React.Component {
     }
   }
   render() {
-    const { missedLetters, word, matchedLetters } = this.state;
-    const { missLength, maxLength } = this.props;
-    const { restartGame } = this;
+    const {
+      restartGame,
+      state: { missedLetters, word, matchedLetters },
+      props: { missLength, maxLength },
+    } = this;
+
     const matched = word.split('').map(letter => (matchedLetters.includes(letter) ? letter : ' '));
     let fixedLengthLetters = [...matched];
     if (word.length < maxLength) {
